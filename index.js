@@ -1,11 +1,13 @@
 const express = require('express')
 const logger = require('morgan')
+const cors = require('cors')
 const app = express()
 
 logger.token('content', function (req, res) { return JSON.stringify(req.body)})
 
 app.use(express.json())
 app.use(logger(':method :url :status :res[content-length] - :response-time ms :content'))
+app.use(cors())
 
 
 
