@@ -63,6 +63,7 @@ app.delete('/api/persons/:id', (request,response) => {
 app.post('/api/persons',(request,response) => {
     const id = Math.floor(Math.random()*1000)
     const body = request.body
+    console.log(body)
     const p = persons.find(person => person.name == body.name)
     if (!body.name || !body.number) {
         return response.status(400).json({ 
