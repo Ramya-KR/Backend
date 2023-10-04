@@ -8,7 +8,7 @@ logger.token('content', function (req, res) { return JSON.stringify(req.body)})
 app.use(express.json())
 app.use(logger(':method :url :status :res[content-length] - :response-time ms :content'))
 app.use(cors())
-
+app.use(express.static('dist'))
 
 
 let persons = [
