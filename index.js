@@ -5,7 +5,6 @@ require('dotenv').config()
 const app = express()
 
 const Person = require('./models/person')
-const person = require('./models/person')
 
 logger.token('content', function (req, res) { return JSON.stringify(req.body)})
 
@@ -42,15 +41,10 @@ app.delete('/api/persons/:id', (request,response) => {
 
 app.post('/api/persons',(request,response) => {
     const body = request.body
-    const p = persons.find(person => person.name == body.name)
     if (!body.name || !body.number) {
         return response.status(400).json({ 
           error: 'name or number is missing' 
         })
-      }else if(p !== null && p !== undefined) {
-        return response.status(400).json({ 
-            error: 'name already exists in phonebook' 
-          })
       }
     const person = new Person({
       name: body.name,
