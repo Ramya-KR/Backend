@@ -27,10 +27,16 @@ app.get('/api/info', (request,response) => {
     </p>`)
 })
 
-app.get('/api/persons/:id',(request,response) => {
-   Person.findById(request.params.id).then(person => {
-    response.json(person)
+app.get('/api/persons/:id',(request,response,next) => {
+   Person.findById(request.params.id)
+   .then(person => {
+    if(person) {
+      response.json(person)
+    } else {
+      response.send(404).end()
+    }
    })
+   .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request,response,next) => {
