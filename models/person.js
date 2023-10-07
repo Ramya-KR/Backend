@@ -20,10 +20,19 @@ mongoose.connect(url)
 const personSchema = new mongoose.Schema({
   name: {
     type: String,
-    minLength: 3,
+    minLength: [3,'name doesn\'t meet minimum length(3) criteria'],
     required: true
   },
-  number: String,
+  number: {
+    type: String,
+    minLength: 8,
+    validate: {
+      validator: function(v) {
+        return /\d{2,3}-\d/.test(v);
+      },
+      message: props => `${props.value} is not a valid phone number!`
+    },
+  }
 })
 
 personSchema.set('toJSON', {
