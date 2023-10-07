@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
@@ -8,7 +9,7 @@ const Person = require('./models/person')
 
 
 
-logger.token('content', function (req, res) { return JSON.stringify(req.body) })
+logger.token('content', function (req, _res) { return JSON.stringify(req.body) })
 
 app.use(express.json())
 app.use(logger(':method :url :status :res[content-length] - :response-time ms :content'))
@@ -17,13 +18,13 @@ app.use(express.static('build'))
 
 const date = new Date()
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (_request, response) => {
   Person.find({}).then(persons => {
     response.json(persons)
   })
 })
 
-app.get('/info', (request, response, next) => {
+app.get('/info', (_request, response, next) => {
   Person.count({})
     .then(res => response.send(`<p>Phonebook has info for ${res} people<br/>
     ${date}
@@ -85,7 +86,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 })
 
-const errorHandler = (error, request, response, next) => {
+const errorHandler = (error, _request, response, next) => {
   console.log(error.message)
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
