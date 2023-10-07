@@ -52,7 +52,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response,next) => {
   const body = request.body
   if (!body.name || !body.number) {
     return response.status(400).json({
@@ -66,8 +66,9 @@ app.post('/api/persons', (request, response) => {
 
   person.save().then(newPerson => {
     response.json(newPerson)
-  })
+  }).catch(error => next(error))
 })
+
 
 app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
@@ -89,7 +90,10 @@ const errorHandler = (error, request, response, next) => {
   console.log(error, request)
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
   }
+
   next(error)
 }
 
@@ -98,3 +102,4 @@ const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`)
 })
+
