@@ -6,6 +6,8 @@ const app = express()
 
 const Person = require('./models/person')
 
+
+
 logger.token('content', function (req, res) { return JSON.stringify(req.body) })
 
 app.use(express.json())
@@ -21,10 +23,12 @@ app.get('/api/persons', (request, response) => {
   })
 })
 
-app.get('/api/info', (request, response) => {
-  response.send(`<p>Phonebook has info for ${persons.length} people<br/>
+app.get('/info', (request, response, next) => {
+  Person.count({})
+    .then(res => response.send(`<p>Phonebook has info for ${res} people<br/>
     ${date}
-    </p>`)
+    </p>`))
+    .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
